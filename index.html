@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kronometre</title>
+  </head>
+  <body>
+    <p id="chronometer">Kronometre</p>
+    <button id="start-chronometer">Başlat</button>
+    <button id="stop-chronometer">Durdur</button>
+    <script>
+      const chronometer = document.getElementById("chronometer");
+      const startButton = document.getElementById("start-chronometer");
+      const stopButton = document.getElementById("stop-chronometer");
+
+      let isStarted = false;
+      let timer = 0;
+      let pauseTime = 0;
+      let eraseTime = 0;
+      let timerTimeout;
+
+      function startChronometer() {
+        if (pauseTime != 0) {
+          eraseTime = new Date().getTime() - pauseTime;
+          pauseTime = 0;
+        }
+        timer = new Date().getTime() - eraseTime;
+        chronometer.textContent = new Date(timer).toLocaleTimeString();
+        timerTimeout = setTimeout(startChronometer, 1000);
+      }
+
+      function stopChronometer() {
+        pauseTime = new Date().getTime() - eraseTime;
+        clearTimeout(timerTimeout);
+      }
+
+      startButton.addEventListener("click", () => {
+        if (isStarted) {
+          return;
+        }
+        isStarted = true;
+        startChronometer();
+      });
+      stopButton.addEventListener("click", () => {
+        if (!isStarted) {
+          return;
+        }
+        isStarted = false;
+        stopChronometer();
+      });
+    </script>
+  </body>
+</html>
